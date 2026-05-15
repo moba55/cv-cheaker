@@ -18,6 +18,8 @@ Here is the complete workflow execution in n8n:
 4. **Email Dispatch:** The AI's JSON output is then passed to another **Execute Command** node running `parse_result.py`, which formats the data into a stunning HTML email and sends it to the candidate.
 5. **Frontend Response:** n8n responds back to the frontend with the JSON result, triggering the UI to display the final verdict and smooth animations.
 
+<img width="1904" height="1524" alt="Apply-Now-—-CV-Submission-05-15-2026_11_08_PM" src="https://github.com/user-attachments/assets/3df5b0f4-9ef5-4622-b1bc-b0f80e6eb043" />
+
 ## ✨ Features
 
 - **⚙️ n8n Powered Workflow**: No traditional backend code is needed; the entire pipeline is visually built and executed in n8n.
@@ -25,6 +27,11 @@ Here is the complete workflow execution in n8n:
 - **📄 Robust PDF Extraction**: Python script utilizing `pdfplumber` to accurately extract text, executed via n8n.
 - **🧠 AI Agent Integration**: Deep integration with AI models to intelligently score candidates.
 - **📧 Automated Email Reports**: Sends beautifully formatted HTML emails automatically using SMTP within the n8n flow.
+
+The Result:
+
+<img width="696" height="2040" alt="Apply-Now-—-CV-Submission-05-15-2026_11_13_PM" src="https://github.com/user-attachments/assets/475af9b3-79e8-4b98-866c-608612b5264e" />
+
 
 ## 📂 Project Structure
 
@@ -54,6 +61,5 @@ Here is the complete workflow execution in n8n:
 2. Update the Javascript fetch URL to point to your **n8n Webhook URL**.
 3. Host `index.html` on any static provider (Vercel, GitHub Pages, Netlify) or just open it locally in your browser.
 
-## 📜 License
 
-This project is open-source and available under the [MIT License](LICENSE).
+
