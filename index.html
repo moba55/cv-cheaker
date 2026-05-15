@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply Now — CV Submission</title>
+  <meta name="description" content="Submit your CV and apply for open positions. Fill out the form below to get started." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===========================
+       CSS RESET & TOKENS
+    =========================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --clr-bg:          #0f1117;
+      --clr-surface:     #181c27;
+      --clr-surface-2:   #1e2233;
+      --clr-border:      #2a2f45;
+      --clr-border-focus:#6366f1;
+      --clr-primary:     #6366f1;
+      --clr-primary-h:   #4f52e8;
+      --clr-accent:      #818cf8;
+      --clr-text:        #e2e8f0;
+      --clr-muted:       #94a3b8;
+      --clr-success-bg:  #0d2318;
+      --clr-success-bdr: #22c55e;
+      --clr-success-txt: #86efac;
+      --clr-error-bg:    #1f0d10;
+      --clr-error-bdr:   #ef4444;
+      --clr-error-txt:   #fca5a5;
+      --radius-sm:       8px;
+      --radius-md:       14px;
+      --radius-lg:       20px;
+      --shadow-card:     0 8px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.04);
+      --transition:      .2s ease;
+      --font:            'Inter', system-ui, sans-serif;
+    }
+
+    /* ===========================
+       BASE
+    =========================== */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--clr-bg);
+      color: var(--clr-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 48px 16px 80px;
+    }
+
+    /* Subtle grid texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===========================
+       HEADER
+    =========================== */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99,102,241,.12);
+      border: 1px solid rgba(99,102,241,.25);
+      color: var(--clr-accent);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--clr-primary);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(.75); }
+    }
+
+    .page-header h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #e2e8f0 0%, var(--clr-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-header p {
+      margin-top: 12px;
+      color: var(--clr-muted);
+      font-size: .95rem;
+      max-width: 440px;
+      margin-inline: auto;
+      line-height: 1.6;
+    }
+
+    /* ===========================
+       CARD
+    =========================== */
+    .card {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      width: 100%;
+      max-width: 620px;
+      padding: 40px 40px 44px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* top gradient accent line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent));
+    }
+
+    /* ===========================
+       FORM LAYOUT
+    =========================== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .form-group.full  { grid-column: 1 / -1; }
+    .form-group.half  { grid-column: span 1; }
+
+    label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--clr-muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    label .required-star {
+      color: #f87171;
+      margin-left: 3px;
+    }
+
+    /* ===========================
+       INPUTS
+    =========================== */
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      background: var(--clr-surface-2);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      color: var(--clr-text);
+      font-family: var(--font);
+      font-size: .92rem;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]:hover,
+    input[type="email"]:hover,
+    input[type="number"]:hover,
+    input[type="url"]:hover,
+    textarea:hover {
+      border-color: #3a4060;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus,
+    input[type="url"]:focus,
+    textarea:focus {
+      border-color: var(--clr-border-focus);
+      box-shadow: 0 0 0 3px rgba(99,102,241,.18);
+      background: #1c2038;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #3d4560;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.6;
+    }
+
+    /* Number input: hide arrows */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    /* ===========================
+       FILE UPLOAD
+    =========================== */
+    .file-upload-wrapper {
+      position: relative;
+    }
+
+    .file-upload-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--clr-surface-2);
+      border: 1.5px dashed var(--clr-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .file-upload-label:hover {
+      border-color: var(--clr-primary);
+      background: #1c2038;
+    }
+
+    .file-upload-label.has-file {
+      border-style: solid;
+      border-color: var(--clr-primary);
+    }
+
+    .file-upload-icon {
+      flex-shrink: 0;
+      width: 38px; height: 38px;
+      background: rgba(99,102,241,.12);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .file-upload-icon svg { width: 18px; height: 18px; stroke: var(--clr-accent); }
+
+    .file-upload-text { flex: 1; min-width: 0; }
+
+    .file-upload-title {
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--clr-text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .file-upload-hint {
+      font-size: .76rem;
+      color: var(--clr-muted);
+      margin-top: 2px;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%; height: 100%;
+    }
+
+    /* ===========================
+       SUBMIT BUTTON
+    =========================== */
+    .btn-submit {
+      width: 100%;
+      padding: 13px 24px;
+      background: linear-gradient(135deg, var(--clr-primary) 0%, #818cf8 100%);
+      color: #fff;
+      font-family: var(--font);
+      font-size: .95rem;
+      font-weight: 600;
+      letter-spacing: .03em;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 4px 18px rgba(99,102,241,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.08), transparent);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      opacity: .92;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(99,102,241,.5);
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(99,102,241,.3);
+    }
+
+    .btn-submit:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .btn-submit.loading .spinner { display: block; }
+
+    /* ===========================
+       DIVIDER
+    =========================== */
+    .form-divider {
+      height: 1px;
+      background: var(--clr-border);
+      margin: 8px 0 24px;
+      grid-column: 1 / -1;
+    }
+
+    .section-label {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--clr-primary);
+      grid-column: 1 / -1;
+      padding-bottom: 2px;
+    }
+
+    /* ===========================
+       FEEDBACK MESSAGES
+    =========================== */
+    .feedback {
+      display: none;
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-top: 24px;
+      animation: slideUp .35s cubic-bezier(.22,.68,0,1.2) forwards;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback.visible { display: flex; gap: 14px; align-items: flex-start; }
+
+    .feedback-icon {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .feedback-body h3 { font-size: .95rem; font-weight: 600; margin-bottom: 4px; }
+    .feedback-body p  { font-size: .85rem; line-height: 1.55; }
+
+    .feedback.success {
+      background: var(--clr-success-bg);
+      border: 1px solid var(--clr-success-bdr);
+      color: var(--clr-success-txt);
+    }
+
+    .feedback.success .feedback-icon { background: rgba(34,197,94,.15); color: #22c55e; }
+
+    .feedback.error {
+      background: var(--clr-error-bg);
+      border: 1px solid var(--clr-error-bdr);
+      color: var(--clr-error-txt);
+    }
+
+    .feedback.error .feedback-icon { background: rgba(239,68,68,.15); color: #ef4444; }
+
+    /* ===========================
+       SUCCESS STATE (full card)
+    =========================== */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px 0 10px;
+      animation: slideUp .4s ease forwards;
+    }
+
+    .success-state.visible { display: flex; }
+
+    .checkmark-circle {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(34,197,94,.1);
+      border: 2px solid rgba(34,197,94,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 22px;
+      animation: popIn .5s cubic-bezier(.22,.68,0,1.2) .1s both;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(.5); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+
+    .success-state h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--clr-text);
+      margin-bottom: 10px;
+    }
+
+    .success-state p {
+      color: var(--clr-muted);
+      font-size: .92rem;
+      line-height: 1.6;
+      max-width: 360px;
+    }
+
+    .success-state .btn-reset {
+      padding: 10px 26px;
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--clr-muted);
+      font-family: var(--font);
+      font-size: .88rem;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    .success-state .btn-reset:hover {
+      background: var(--clr-surface-2);
+      color: var(--clr-text);
+      border-color: var(--clr-accent);
+    }
+
+    .success-state .btn-download {
+      padding: 12px 28px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--clr-primary) 0%, #818cf8 100%);
+      color: #fff;
+      font-family: var(--font);
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(99,102,241,.35);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display: none; /* hidden until result is ready */
+      align-items: center;
+      gap: 8px;
+    }
+
+    .success-state .btn-download svg {
+      width: 18px; height: 18px;
+    }
+
+    .success-state .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(99,102,241,.5);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    /* ===========================
+       FOOTER
+    =========================== */
+    .page-footer {
+      margin-top: 32px;
+      text-align: center;
+      color: #3d4560;
+      font-size: .78rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===========================
+       RESULT CARD
+    =========================== */
+    .result-header { text-align: center; margin-bottom: 24px; }
+    .result-subtitle { color: var(--clr-muted); font-size: .9rem; margin-top: 8px; }
+
+    .result-card {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+
+    /* Score ring */
+    .score-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background: var(--clr-surface-2);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+
+    .score-ring {
+      flex-shrink: 0;
+      width: 90px; height: 90px;
+      position: relative;
+    }
+
+    .score-ring svg {
+      width: 100%; height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg  { fill: none; stroke: #2a2f45; stroke-width: 9; }
+    .ring-fill {
+      fill: none;
+      stroke: #6366f1;
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-dasharray: 264;
+      stroke-dashoffset: 264;
+      transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),
+                  stroke .4s ease;
+    }
+
+    .score-number {
+      position: absolute;
+      inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--clr-text);
+    }
+
+    .verdict-info { flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+
+    .verdict-badge {
+      display: inline-block;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(99,102,241,.15);
+      color: var(--clr-accent);
+      border: 1px solid rgba(99,102,241,.3);
+      width: fit-content;
+    }
+    .verdict-badge.strong { background:rgba(34,197,94,.12); color:#4ade80; border-color:rgba(34,197,94,.3); }
+    .verdict-badge.good   { background:rgba(234,179,8,.12);  color:#fbbf24; border-color:rgba(234,179,8,.3); }
+    .verdict-badge.partial{ background:rgba(249,115,22,.12); color:#fb923c; border-color:rgba(249,115,22,.3); }
+    .verdict-badge.weak   { background:rgba(239,68,68,.12);  color:#f87171; border-color:rgba(239,68,68,.3); }
+
+    .result-summary { font-size: .84rem; color: var(--clr-muted); line-height: 1.6; margin: 0; }
+
+    /* Sections */
+    .result-section {
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+    }
+    .result-strengths { background:#0d2318; border:1px solid #166534; }
+    .result-gaps      { background:#1f0d10; border:1px solid #7f1d1d; }
+    .result-reco      { background:#1e1b35; border:1px solid #4338ca; }
+
+    .rs-label {
+      font-size: .75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .07em;
+      margin-bottom: 10px;
+    }
+    .result-strengths .rs-label { color: #4ade80; }
+    .result-gaps      .rs-label { color: #f87171; }
+    .result-reco      .rs-label { color: #818cf8; }
+
+    .result-section ul { margin: 0; padding-left: 18px; }
+    .result-section li { font-size: .87rem; line-height: 1.6; margin: 5px 0; }
+    .result-strengths li { color: #d1fae5; }
+    .result-gaps      li { color: #fecaca; }
+    .result-reco      p  { font-size: .87rem; color: #c7d2fe; line-height: 1.7; margin: 0; }
+
+    /* Keywords */
+    .keywords-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .kw-group { background: var(--clr-surface-2); border:1px solid var(--clr-border); border-radius: var(--radius-sm); padding: 14px; }
+    .kw-title { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+    .kw-match { color: #4ade80; }
+    .kw-miss  { color: #f87171; }
+    .kw-tags  { display: flex; flex-wrap: wrap; gap: 6px; }
+    .kw-tag   { font-size: .75rem; padding: 3px 10px; border-radius: 999px; }
+    .kw-tag.match { background:#1e3a2f; color:#4ade80; }
+    .kw-tag.miss  { background:#3b1111; color:#f87171; }
+
+    /* ===========================
+       ANALYZING STATE
+    =========================== */
+    .analyzing-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 0;
+      animation: fadeIn .4s ease forwards;
+    }
+    .analyzing-state.visible { display: flex; }
+
+    .ai-radar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(99,102,241,.1);
+      border: 2px solid rgba(99,102,241,.3);
+      position: relative;
+      margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    
+    .ai-radar::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: var(--clr-primary);
+      animation: spin 1.2s linear infinite;
+    }
+
+    .ai-radar::after {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      background: var(--clr-primary);
+      opacity: 0.3;
+      animation: pulseAI 1.5s ease-in-out infinite alternate;
+    }
+
+    .ai-radar svg {
+      width: 32px; height: 32px;
+      stroke: var(--clr-accent);
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulseAI {
+      from { transform: scale(0.8); opacity: 0.2; }
+      to   { transform: scale(1.1); opacity: 0.6; }
+    }
+
+    .analyzing-state h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--clr-text);
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #e2e8f0 0%, var(--clr-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .analyzing-state p {
+      color: var(--clr-muted);
+      font-size: .92rem;
+      line-height: 1.6;
+      max-width: 380px;
+    }
+
+    .analyzing-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 24px;
+      width: 100%;
+      max-width: 280px;
+      text-align: left;
+    }
+
+    .a-step {
+      display: flex; align-items: center; gap: 12px;
+      font-size: .85rem; color: var(--clr-muted);
+    }
+    
+    .a-step .spinner {
+      width: 14px; height: 14px; border-width: 2px;
+      border-top-color: var(--clr-primary);
+      display: inline-block;
+    }
+
+    /* ===========================
+       RESPONSIVE
+    =========================== */
+    @media (max-width: 560px) {
+      .card { padding: 28px 20px 32px; }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.half { grid-column: 1; }
+
+      .score-row { flex-direction: column; align-items: center; text-align: center; }
+      .verdict-info { align-items: center; }
+      .keywords-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="page-header">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      We're Hiring
+    </div>
+    <h1>Apply for a Position</h1>
+    <p>Fill out the form below and attach your CV. We'll review your application and get back to you shortly.</p>
+  </header>
+
+  <!-- ===== CARD ===== -->
+  <main class="card" id="main-card" role="main">
+
+    <!-- ANALYZING STATE -->
+    <div class="analyzing-state" id="analyzing-state">
+      <div class="ai-radar">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+        </svg>
+      </div>
+      <h2>AI is analyzing your CV...</h2>
+      <p>Please hold on while our AI compares your experience to the job description. This usually takes about 15-30 seconds.</p>
+      
+      <div class="analyzing-steps">
+        <div class="a-step"><span class="spinner"></span> Extracting text from PDF</div>
+        <div class="a-step" style="opacity:0.6;"><span class="spinner" style="border-top-color:transparent;"></span> Evaluating core skills</div>
+        <div class="a-step" style="opacity:0.3;"><span class="spinner" style="border-top-color:transparent;"></span> Generating recommendations</div>
+      </div>
+    </div>
+
+    <!-- ANALYSIS RESULT STATE -->
+    <div class="success-state" id="success-state" role="status" aria-live="polite">
+
+      <!-- Generic submitted header -->
+      <div class="result-header">
+        <div class="checkmark-circle">✓</div>
+        <h2>Analysis Complete!</h2>
+        <p class="result-subtitle">Here's how your CV matches the job description.</p>
+      </div>
+
+      <!-- AI result card (populated by JS) -->
+      <div id="result-card" class="result-card" style="display:none;">
+
+        <!-- Score ring + verdict -->
+        <div class="score-row">
+          <div class="score-ring" id="score-ring">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" class="ring-bg"/>
+              <circle cx="50" cy="50" r="42" class="ring-fill" id="ring-fill"/>
+            </svg>
+            <span class="score-number" id="score-number">0</span>
+          </div>
+          <div class="verdict-info">
+            <span class="verdict-badge" id="verdict-badge">—</span>
+            <p class="result-summary" id="result-summary"></p>
+          </div>
+        </div>
+
+        <!-- Strengths -->
+        <div class="result-section result-strengths">
+          <div class="rs-label">✅ Strengths</div>
+          <ul id="list-strengths"></ul>
+        </div>
+
+        <!-- Gaps -->
+        <div class="result-section result-gaps">
+          <div class="rs-label">❌ Gaps</div>
+          <ul id="list-gaps"></ul>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="result-section result-reco">
+          <div class="rs-label">💡 Recommendations</div>
+          <p id="result-reco"></p>
+        </div>
+
+        <!-- Keywords -->
+        <div class="keywords-row">
+          <div class="kw-group">
+            <div class="kw-title kw-match">Matched</div>
+            <div class="kw-tags" id="kw-matched"></div>
+          </div>
+          <div class="kw-group">
+            <div class="kw-title kw-miss">Missing</div>
+            <div class="kw-tags" id="kw-missing"></div>
+          </div>
+        </div>
+
+      </div><!-- /#result-card -->
+
+      <div class="action-buttons">
+        <button class="btn-download" id="btn-download" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          Download Full Report
+        </button>
+        <button class="btn-reset" id="btn-reset" type="button">Analyse another CV</button>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <form id="cv-form" novalidate>
+
+      <div class="form-grid">
+
+        <!-- SECTION: Personal Info -->
+        <span class="section-label">Personal Information</span>
+
+        <div class="form-group half">
+          <label for="full-name">Full Name <span class="required-star">*</span></label>
+          <input
+            type="text"
+            id="full-name"
+            name="fullName"
+            placeholder="Jane Doe"
+            required
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="form-group half">
+          <label for="email">Email Address <span class="required-star">*</span></label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="jane@example.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group half">
+          <label for="phone">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            placeholder="+1 (555) 000-0000"
+            autocomplete="tel"
+          />
+        </div>
+
+        <div class="form-group half">
+          <label for="linkedin">LinkedIn URL</label>
+          <input
+            type="url"
+            id="linkedin"
+            name="linkedin"
+            placeholder="https://linkedin.com/in/janedoe"
+          />
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="form-divider"></div>
+
+        <!-- SECTION: Job Details -->
+        <span class="section-label">Role Details</span>
+
+        <div class="form-group half">
+          <label for="position">Job Position <span class="required-star">*</span></label>
+          <input
+            type="text"
+            id="position"
+            name="position"
+            placeholder="e.g. Frontend Developer"
+            required
+          />
+        </div>
+
+        <div class="form-group half">
+          <label for="experience">Years of Experience <span class="required-star">*</span></label>
+          <input
+            type="number"
+            id="experience"
+            name="yearsExperience"
+            placeholder="e.g. 3"
+            min="0"
+            required
+          />
+        </div>
+
+        <div class="form-group full">
+          <label for="cover-letter">Cover Letter / Message</label>
+          <textarea
+            id="cover-letter"
+            name="coverLetter"
+            placeholder="Tell us a little about yourself and why you're a great fit…"
+          ></textarea>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="form-divider"></div>
+
+        <!-- SECTION: CV Upload -->
+        <span class="section-label">CV / Résumé</span>
+
+        <div class="form-group full">
+          <label for="cv-file">Upload CV (PDF, max 5 MB) <span class="required-star">*</span></label>
+          <div class="file-upload-wrapper">
+            <label class="file-upload-label" id="file-upload-label" for="cv-file">
+              <div class="file-upload-icon">
+                <!-- Upload icon (heroicons) -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+              </div>
+              <div class="file-upload-text">
+                <div class="file-upload-title" id="file-name-display">Click to browse or drag &amp; drop</div>
+                <div class="file-upload-hint">PDF only · Max 5 MB</div>
+              </div>
+            </label>
+            <input
+              type="file"
+              id="cv-file"
+              name="cvFile"
+              accept=".pdf"
+              required
+              aria-label="Upload your CV as a PDF file"
+            />
+          </div>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="form-divider"></div>
+
+        <!-- SECTION: Job Description -->
+        <span class="section-label">Job Description</span>
+
+        <div class="form-group full">
+          <label for="job-description">Job Description / Requirements <span class="required-star">*</span></label>
+          <textarea
+            id="job-description"
+            name="job_description"
+            placeholder="Paste the full job posting text here — the AI will compare it directly against your CV to tailor the analysis…"
+            required
+            style="min-height: 160px;"
+          ></textarea>
+        </div>
+
+      </div><!-- /.form-grid -->
+
+      <!-- ERROR FEEDBACK -->
+      <div class="feedback error" id="error-msg" role="alert" aria-live="assertive">
+        <div class="feedback-icon">✕</div>
+        <div class="feedback-body">
+          <h3>Something went wrong</h3>
+          <p id="error-text">Please check your details and try again.</p>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <button type="submit" class="btn-submit" id="btn-submit" style="margin-top:28px;">
+        <span class="spinner" id="spinner"></span>
+        <span id="btn-text">Submit Application</span>
+      </button>
+
+    </form>
+
+  </main>
+
+  <footer class="page-footer">
+    <p>Your data is handled with care &amp; never shared with third parties.</p>
+  </footer>
+
+
+  <!-- ===========================
+       JAVASCRIPT
+  =========================== -->
+  <script>
+    /* ---- CONFIG ---- */
+    const N8N_WEBHOOK_URL = 'https://n8n.srv1349051.hstgr.cloud/webhook/16ded55f-e1fd-4389-847a-eef6798934af';
+
+    /* ---- DOM refs ---- */
+    const form            = document.getElementById('cv-form');
+    const btnSubmit       = document.getElementById('btn-submit');
+    const btnText         = document.getElementById('btn-text');
+    const spinner         = document.getElementById('spinner');
+    const errorMsg        = document.getElementById('error-msg');
+    const errorText       = document.getElementById('error-text');
+    const analyzingState  = document.getElementById('analyzing-state');
+    const successState    = document.getElementById('success-state');
+    const btnReset        = document.getElementById('btn-reset');
+    const cvFileInput     = document.getElementById('cv-file');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const fileLabel       = document.getElementById('file-upload-label');
+
+    /* ---- FILE PREVIEW ---- */
+    cvFileInput.addEventListener('change', () => {
+      const file = cvFileInput.files[0];
+      if (file) {
+        fileNameDisplay.textContent = file.name;
+        fileLabel.classList.add('has-file');
+      } else {
+        fileNameDisplay.textContent = 'Click to browse or drag & drop';
+        fileLabel.classList.remove('has-file');
+      }
+    });
+
+    /* ---- HELPERS ---- */
+    function showError(message) {
+      errorText.textContent = message;
+      errorMsg.classList.add('visible');
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideError() {
+      errorMsg.classList.remove('visible');
+    }
+
+    function setLoading(isLoading) {
+      btnSubmit.disabled = isLoading;
+      btnSubmit.classList.toggle('loading', isLoading);
+      btnText.textContent = isLoading ? 'Submitting…' : 'Submit Application';
+    }
+
+    function resetForm() {
+      form.reset();
+      fileNameDisplay.textContent = 'Click to browse or drag & drop';
+      fileLabel.classList.remove('has-file');
+      hideError();
+      successState.classList.remove('visible');
+      analyzingState.classList.remove('visible');
+      form.style.display = '';
+    }
+
+    /* ---- RESET BUTTON ---- */
+    btnReset.addEventListener('click', () => {
+      resetForm();
+      document.getElementById('result-card').style.display = 'none';
+      
+      // Reset lists and text content
+      document.getElementById('list-strengths').innerHTML = '';
+      document.getElementById('list-gaps').innerHTML = '';
+      document.getElementById('result-reco').textContent = '';
+      document.getElementById('kw-matched').innerHTML = '';
+      document.getElementById('kw-missing').innerHTML = '';
+      document.getElementById('result-summary').textContent = '';
+      document.getElementById('verdict-badge').textContent = '—';
+      document.getElementById('verdict-badge').className = 'verdict-badge';
+      
+      // Reset score ring
+      document.getElementById('score-number').textContent = '0';
+      document.getElementById('ring-fill').style.strokeDashoffset = '264';
+    });
+
+    /* ---- RENDER AI RESULT ---- */
+    let currentReportText = '';
+
+    function renderResult(data) {
+      document.getElementById('result-card').style.display = 'flex';
+      // Make sure it displays as a flexbox to keep the icon aligned
+      document.getElementById('btn-download').style.display = 'flex';
+
+      // Helper to ensure lists are arrays (handles if AI returns comma-separated strings instead of arrays)
+      const toArray = (val) => {
+        if (!val) return [];
+        if (Array.isArray(val)) return val;
+        if (typeof val === 'string') return val.split(',').map(s => s.trim()).filter(Boolean);
+        return [];
+      };
+
+      const scoreValue = data.score !== undefined ? data.score : (data.match_score || 0);
+      const verdictValue = data.verdict || 'N/A';
+      const summaryValue = data.summary || '';
+      const strengthsArr = toArray(data.strengths);
+      const gapsArr = toArray(data.gaps);
+      const recoValue = data.recomindation || data.recommendations || '';
+      const kmatchArr = toArray(data.Kmatch || data.keywords_matched);
+      const kmissArr = toArray(data.Kmiss || data.keywords_missing);
+
+      // Build text for download
+      currentReportText = `=== CV MATCH ANALYSIS REPORT ===\n\n` +
+        `Score: ${scoreValue}/100\n` +
+        `Verdict: ${verdictValue}\n\n` +
+        (summaryValue ? `SUMMARY:\n${summaryValue}\n\n` : '') +
+        `STRENGTHS:\n${strengthsArr.map(s => '- ' + s).join('\n')}\n\n` +
+        `GAPS:\n${gapsArr.map(g => '- ' + g).join('\n')}\n\n` +
+        `RECOMMENDATIONS:\n${recoValue}\n\n` +
+        `MATCHED KEYWORDS: ${kmatchArr.join(', ')}\n` +
+        `MISSING KEYWORDS: ${kmissArr.join(', ')}\n`;
+
+      // Score
+      document.getElementById('score-number').textContent = scoreValue;
+      
+      // Animate ring (circumference is ~264)
+      const offset = 264 - (scoreValue / 100) * 264;
+      const ringFill = document.getElementById('ring-fill');
+      
+      // Set color based on score
+      let color = '#ef4444'; // Red
+      if (scoreValue >= 70) color = '#22c55e'; // Green
+      else if (scoreValue >= 45) color = '#f59e0b'; // Orange
+      
+      setTimeout(() => {
+        ringFill.style.stroke = color;
+        ringFill.style.strokeDashoffset = offset;
+      }, 100);
+
+      // Verdict
+      const badge = document.getElementById('verdict-badge');
+      badge.textContent = verdictValue;
+      
+      badge.className = 'verdict-badge'; // reset
+      if (verdictValue.includes('STRONG')) badge.classList.add('strong');
+      else if (verdictValue.includes('GOOD')) badge.classList.add('good');
+      else if (verdictValue.includes('PARTIAL')) badge.classList.add('partial');
+      else badge.classList.add('weak');
+
+      // Summary
+      document.getElementById('result-summary').textContent = summaryValue;
+
+      // Helper to populate lists
+      const populateList = (id, items, icon) => {
+        const ul = document.getElementById(id);
+        ul.innerHTML = '';
+        if (Array.isArray(items)) {
+          items.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = `${icon} ${item}`;
+            ul.appendChild(li);
+          });
+        }
+      };
+
+      populateList('list-strengths', strengthsArr, '✅');
+      populateList('list-gaps', gapsArr, '❌');
+
+      // Recommendations
+      document.getElementById('result-reco').textContent = recoValue;
+
+      // Keywords helper
+      const populateTags = (id, keywords, type) => {
+        const container = document.getElementById(id);
+        container.innerHTML = '';
+        if (keywords.length > 0) {
+          keywords.forEach(kw => {
+            const span = document.createElement('span');
+            span.className = `kw-tag ${type}`;
+            span.textContent = kw;
+            container.appendChild(span);
+          });
+        } else {
+            container.innerHTML = '<span style="color:var(--clr-muted);font-size:0.75rem;">None</span>';
+        }
+      };
+
+      populateTags('kw-matched', kmatchArr, 'match');
+      populateTags('kw-missing', kmissArr, 'miss');
+    }
+
+    /* ---- DOWNLOAD BTN ---- */
+    document.getElementById('btn-download').addEventListener('click', () => {
+      if (!currentReportText) return;
+      const blob = new Blob([currentReportText], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'CV_Analysis_Report.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    /* ---- FORM SUBMIT ---- */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      /* --- Validate required fields --- */
+      const fullName   = form.fullName.value.trim();
+      const email      = form.email.value.trim();
+      const position   = form.position.value.trim();
+      const experience = form.yearsExperience.value;
+
+      if (!fullName) {
+        showError('Full Name is required.');
+        form.fullName.focus();
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailRegex.test(email)) {
+        showError('Please enter a valid email address.');
+        form.email.focus();
+        return;
+      }
+
+      if (!position) {
+        showError('Job Position is required.');
+        form.position.focus();
+        return;
+      }
+
+      if (experience === '' || Number(experience) < 0) {
+        showError('Please enter a valid number of years of experience (0 or more).');
+        form.yearsExperience.focus();
+        return;
+      }
+
+      const jobDescription = form.job_description.value.trim();
+      if (!jobDescription) {
+        showError('Please paste the Job Description / Requirements so the AI can compare it against your CV.');
+        form.job_description.focus();
+        return;
+      }
+
+      /* --- Validate CV file --- */
+      const file = cvFileInput.files[0];
+
+      if (!file) {
+        showError('Please upload your CV as a PDF file.');
+        return;
+      }
+
+      if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        showError('Only PDF files are accepted. Please upload a .pdf file.');
+        return;
+      }
+
+      const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+      if (file.size > MAX_SIZE_BYTES) {
+        showError(`Your CV file is ${(file.size / 1024 / 1024).toFixed(1)} MB. Please upload a file under 5 MB.`);
+        return;
+      }
+
+      /* --- Build FormData --- */
+      const data = new FormData();
+      data.append('fullName',        fullName);
+      data.append('email',           email);
+      data.append('phone',           form.phone.value.trim());
+      data.append('linkedin',        form.linkedin.value.trim());
+      data.append('position',        position);
+      data.append('yearsExperience', experience);
+      data.append('coverLetter',     form.coverLetter.value.trim());
+      data.append('job_description',  jobDescription);
+      data.append('cvFile',           file, file.name);
+
+      /* --- Send to n8n webhook --- */
+      form.style.display = 'none';
+      analyzingState.classList.add('visible');
+
+      // Simple animation sequence for the steps
+      const steps = analyzingState.querySelectorAll('.a-step');
+      setTimeout(() => {
+        if(steps[0]) steps[0].innerHTML = '✅ Extracting text from PDF';
+        if(steps[1]) { steps[1].style.opacity = '1'; steps[1].querySelector('.spinner').style.borderTopColor = 'var(--clr-primary)'; }
+      }, 3000);
+      setTimeout(() => {
+        if(steps[1]) steps[1].innerHTML = '✅ Evaluating core skills';
+        if(steps[2]) { steps[2].style.opacity = '1'; steps[2].querySelector('.spinner').style.borderTopColor = 'var(--clr-primary)'; }
+      }, 7000);
+
+      try {
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          body: data,
+          // Note: Do NOT set Content-Type header manually when using FormData.
+          // The browser will automatically set it with the correct boundary.
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server responded with status ${response.status}.`);
+        }
+
+        /* SUCCESS — parse and render AI result */
+        let aiData = null;
+        try {
+          const raw = await response.text();
+          // n8n may return escaped JSON string or a plain object
+          aiData = typeof raw === 'string' ? JSON.parse(raw) : raw;
+          // If it's an array (n8n wraps sometimes), take first item
+          if (Array.isArray(aiData)) aiData = aiData[0];
+          // If the AI result is nested under a key
+          if (aiData && typeof aiData === 'object' && aiData.score === undefined && aiData.match_score === undefined) {
+            const keys = Object.keys(aiData);
+            for (const k of keys) {
+              if (typeof aiData[k] === 'string') {
+                try { aiData = JSON.parse(aiData[k]); break; } catch {}
+              }
+            }
+          }
+        } catch (parseErr) {
+          console.warn('Could not parse AI response as JSON:', parseErr);
+        }
+
+        analyzingState.classList.remove('visible');
+        successState.classList.add('visible');
+
+        if (aiData && (aiData.score !== undefined || aiData.match_score !== undefined)) {
+          renderResult(aiData);
+        } else {
+          console.error("Missing score or match_score. Raw data:", aiData);
+          successState.classList.remove('visible');
+          form.style.display = ''; 
+          showError(`Received a response from n8n, but it didn't contain the AI results. Ensure your Respond to Webhook node has the expression {{ $json }}.`);
+        }
+
+      } catch (err) {
+        console.error('Submission error:', err);
+        analyzingState.classList.remove('visible');
+        form.style.display = ''; // Show form back if it failed
+        showError(
+          err.message.includes('Failed to fetch')
+            ? 'Could not connect to the server. Please check your internet connection and try again.'
+            : `Submission failed: ${err.message} Please try again.`
+        );
+      }
+    });
+  </script>
+
+</body>
+</html>
